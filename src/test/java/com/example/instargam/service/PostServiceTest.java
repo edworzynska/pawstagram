@@ -49,7 +49,7 @@ class PostServiceTest {
     @Test
     void successfullyUploadsPicAndReturnsUrl() throws IOException {
         String username = "doobee";
-        String filepath = "/doobee/posts/doobee.jpg";
+        String filepath = "users/doobee/posts/doobee.jpg";
         String s3Url = "https://s3.amazonaws.com/my-instargam-app/" + filepath;
 
         User user = new User();
@@ -70,7 +70,7 @@ class PostServiceTest {
     @Test
     void throwsInvalidParameterExceptionIfInvalidFileFormat() throws IOException {
         String username = "doobee";
-        String filepath = "/doobee/posts/doobee.gif";
+        String filepath = "users/doobee/posts/doobee.gif";
         String s3Url = "https://s3.amazonaws.com/my-instargam-app/" + filepath;
 
         User user = new User();
@@ -93,7 +93,7 @@ class PostServiceTest {
     @Test
     void createsPostSuccessfully() throws IOException {
         String username = "doobee";
-        String filepath = "/doobee/posts/doobee.jpg";
+        String filepath = "users/doobee/posts/doobee.jpg";
         String s3Url = "https://s3.amazonaws.com/my-instargam-app/" + filepath;
 
         User user = new User();
@@ -116,7 +116,7 @@ class PostServiceTest {
     @Test
     void createsPostWithNullDescriptionSuccessfully() throws IOException {
         String username = "doobee";
-        String filepath = "/doobee/posts/doobee.jpg";
+        String filepath = "users/doobee/posts/doobee.jpg";
         String s3Url = "https://s3.amazonaws.com/my-instargam-app/" + filepath;
 
         User user = new User();

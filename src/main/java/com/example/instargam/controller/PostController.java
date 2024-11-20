@@ -23,6 +23,7 @@ public class PostController {
     @Autowired
     private AuthenticationService authenticationService;
 
+    @Autowired
     public PostController(PostService postService, AuthenticationService authenticationService) {
         this.postService = postService;
         this.authenticationService = authenticationService;

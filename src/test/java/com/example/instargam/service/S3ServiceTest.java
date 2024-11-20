@@ -21,7 +21,7 @@ public class S3ServiceTest {
     @Test
     public void testUploadFile() throws IOException {
         File file = new File("src/test/resources/IMG_1617.jpeg");
-        String filepath = "profile-pics/test.jpg";
+        String filepath = "users/test/profile-pics/IMG_1617.jpeg";
 
         String fileUrl = s3Service.upload(new MockMultipartFile("file", file.getName(), "image/jpeg", new FileInputStream(file)), filepath);
 

@@ -31,7 +31,7 @@ public class PostService {
 
     @Transactional
     public String uploadPic(MultipartFile file, String username) throws FileUploadException {
-        String filePath = "/" + username + "/posts/" + file.getOriginalFilename();
+        String filePath = "users/" + username + "/posts/" + file.getOriginalFilename();
 
         if (!file.getContentType().equals("image/jpeg") && !file.getContentType().equals("image/png")) {
             throw new InvalidParameterException("Invalid format of the file. Accepted extensions: .jpeg, .jpg, .png, .jpe");

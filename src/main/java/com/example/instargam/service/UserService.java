@@ -93,7 +93,7 @@ public class UserService {
 
     @Transactional
     public String uploadProfilePic(MultipartFile file, String username) throws FileUploadException {
-        String filePath = "profile-pics/" + username + ".jpg";
+        String filePath = "users/" + username + "/profile-pics/" + file.getOriginalFilename();
 
         if (!file.getContentType().equals("image/jpeg") && !file.getContentType().equals("image/png")) {
             throw new InvalidParameterException("Invalid format of the file. Accepted extensions: .jpeg, .jpg, .png, .jpe");

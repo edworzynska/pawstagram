@@ -158,7 +158,7 @@ class UserServiceTest {
     @Test
     void successfullyUploadsProfilePicture() throws IOException {
         String username = "doobee";
-        String filepath = "profile-pics/doobee.jpg";
+        String filepath = "users/doobee/profile-pics/doobee.jpg";
         String s3Url = "https://s3.amazonaws.com/my-instargam-app/" + filepath;
 
         User user = new User();
