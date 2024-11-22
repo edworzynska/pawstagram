@@ -134,6 +134,7 @@ class PostServiceTest {
         assertNotNull(post);
         assertNull(post.getDescription());
         assertEquals(s3Url, post.getImgUrl());
+        assertEquals(user, post.getUser());
         verify(postRepository, times(1)).save(post);
     }
 }

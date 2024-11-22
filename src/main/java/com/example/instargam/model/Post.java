@@ -1,11 +1,14 @@
 package com.example.instargam.model;
 
+import jakarta.annotation.Nullable;
 import jakarta.persistence.*;
 import lombok.Data;
 import org.hibernate.annotations.CreationTimestamp;
 
 import java.security.InvalidParameterException;
 import java.time.LocalDateTime;
+import java.util.HashSet;
+import java.util.Set;
 
 @Data
 @Entity
@@ -29,6 +32,10 @@ public class Post {
     @CreationTimestamp
     @Column(name = "date", nullable = false, updatable = false)
     private LocalDateTime date;
+
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<Like> likes = new HashSet<>();
+
 
     public void setDescription(String description){
         if (description.length() > 1000){

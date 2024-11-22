@@ -22,6 +22,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.multipart;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -32,12 +33,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 public class PostControllerTest {
 
     @Autowired
-    private PostController postController;
-
-    @Autowired
-    private PostRepository postRepository;
-
-    @Autowired
     private UserRepository userRepository;
 
     @Autowired
@@ -45,15 +40,6 @@ public class PostControllerTest {
 
     @Autowired
     private PasswordEncoder passwordEncoder;
-
-    @Autowired
-    private AuthenticationService authenticationService;
-
-    @Autowired
-    private S3Service s3Service;
-
-    @Autowired
-    private UserService userService;
 
     private User testUser;
 
@@ -84,4 +70,22 @@ public class PostControllerTest {
                 .andExpect(status().isCreated())
                 .andExpect(content().string("Post uploaded successfully!"));
     }
+    @Test
+    @WithUserDetails(value = "test.email@email.com", setupBefore = TestExecutionEvent.TEST_EXECUTION)
+    void uploadsPostWithEmptyDescription() throws Exception{
+
+        MockMultipartFile mockFile = new MockMultipartFile(
+                "file",
+                "test-image.jpg",
+                "image/jpeg",
+                "sample image content".getBytes()
+        );
+        mockMvc.perform(multipart("/add-post")
+                        .file(mockFile)
+                        .with(user(testUser.getEmail()))
+                        .contentType(MediaType.MULTIPART_FORM_DATA))
+                .andExpect(status().isCreated())
+                .andExpect(content().string("Post uploaded successfully!"));
+    }
+
 }

@@ -6,6 +6,7 @@ import com.example.instargam.model.User;
 import com.example.instargam.repository.PostRepository;
 import com.example.instargam.service.AuthenticationService;
 import com.example.instargam.service.PostService;
+import org.apache.tomcat.util.http.fileupload.FileUploadException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -32,15 +33,11 @@ public class PostController {
     @PostMapping("/add-post")
     public ResponseEntity<Object> addPost(
             @RequestParam MultipartFile file,
-            @RequestParam(required = false) String description){
+            @RequestParam(required = false) String description) throws FileUploadException {
 
         User loggedUser = authenticationService.getLoggedUser();
 
-        try {
-            postService.createPost(file, description, loggedUser);
-            return new ResponseEntity<>("Post uploaded successfully!", HttpStatus.CREATED);
-        } catch (Exception e) {
-            return new ResponseEntity<>("Error uploading the post: " + e.getMessage(), HttpStatus.BAD_REQUEST);
-        }
+        postService.createPost(file, description, loggedUser);
+        return new ResponseEntity<>("Post uploaded successfully!", HttpStatus.CREATED);
     }
 }
