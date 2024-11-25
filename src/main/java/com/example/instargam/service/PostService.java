@@ -1,12 +1,16 @@
 package com.example.instargam.service;
 
+import com.example.instargam.model.Like;
 import com.example.instargam.model.Post;
 import com.example.instargam.model.User;
+import com.example.instargam.repository.LikeRepository;
 import com.example.instargam.repository.PostRepository;
 import com.example.instargam.repository.UserRepository;
 import jakarta.annotation.Nullable;
+import jakarta.persistence.EntityNotFoundException;
 import org.apache.tomcat.util.http.fileupload.FileUploadException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authorization.AuthorizationDeniedException;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -19,13 +23,15 @@ import java.security.InvalidParameterException;
 public class PostService {
 
     private PostRepository postRepository;
+    private LikeRepository likeRepository;
     private UserRepository userRepository;
     private S3Service s3Service;
 
     @Autowired
-    public PostService(PostRepository postRepository, UserRepository userRepository, S3Service s3Service) {
+    public PostService(PostRepository postRepository, UserRepository userRepository, LikeRepository likeRepository, S3Service s3Service) {
         this.postRepository = postRepository;
         this.userRepository = userRepository;
+        this.likeRepository = likeRepository;
         this.s3Service = s3Service;
     }
 
@@ -56,5 +62,17 @@ public class PostService {
         postRepository.save(post);
 
         return post;
+    }
+    @Transactional
+    public void deletePost(Long postId, User loggedUser){
+
+        Post post = postRepository.findById(postId).orElseThrow(() ->
+                new EntityNotFoundException("Post not found!"));
+
+        if( post.getUser().equals(loggedUser)){
+            likeRepository.deleteByPost(post);
+            postRepository.delete(post);
+        }
+        else throw new SecurityException("Access denied!");
     }
 }

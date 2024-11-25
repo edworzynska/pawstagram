@@ -33,7 +33,7 @@ public class Post {
     @Column(name = "date", nullable = false, updatable = false)
     private LocalDateTime date;
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<Like> likes = new HashSet<>();
 
 

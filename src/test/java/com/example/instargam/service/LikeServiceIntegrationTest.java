@@ -31,6 +31,9 @@ class LikeServiceIntegrationTest {
     @Autowired
     private PostRepository postRepository;
 
+    @Autowired
+    private PostService postService;
+
     private User user1;
     private User user2;
     private User user3;
@@ -134,5 +137,13 @@ class LikeServiceIntegrationTest {
         assertEquals(3, likeService.postLikes(post1).size());
         assertEquals("username_1", likeService.postLikes(post1).getFirst().getUsername());
         assertEquals("/users/username_1", likeService.postLikes(post1).getFirst().getProfileUrl());
+    }
+
+    @Test
+    void likeIsDeletedIfPostIsDeleted() {
+        likeService.likePost(post1, user1);
+        assertEquals(1, likeRepository.count());
+        postService.deletePost(post1);
+        assertEquals(0, likeRepository.count());
     }
 }

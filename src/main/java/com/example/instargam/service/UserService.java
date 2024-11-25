@@ -1,6 +1,8 @@
 package com.example.instargam.service;
 
 import com.example.instargam.model.User;
+import com.example.instargam.repository.LikeRepository;
+import com.example.instargam.repository.PostRepository;
 import com.example.instargam.repository.UserRepository;
 import jakarta.mail.internet.AddressException;
 import jakarta.mail.internet.InternetAddress;
@@ -22,12 +24,16 @@ import java.util.regex.Pattern;
 public class UserService {
 
     private UserRepository userRepository;
+    private PostRepository postRepository;
+    private LikeRepository likeRepository;
     private S3Service s3Service;
     private PasswordEncoder passwordEncoder;
 
     @Autowired
-    public UserService(UserRepository userRepository, S3Service s3Service, PasswordEncoder passwordEncoder){
+    public UserService(UserRepository userRepository, PostRepository postRepository, LikeRepository likeRepository, S3Service s3Service, PasswordEncoder passwordEncoder){
         this.userRepository = userRepository;
+        this.postRepository = postRepository;
+        this.likeRepository = likeRepository;
         this.s3Service = s3Service;
         this.passwordEncoder = passwordEncoder;
     }
@@ -117,5 +123,11 @@ public class UserService {
                 -> new UsernameNotFoundException("User not found"));
         user.setBio(bio);
         userRepository.save(user);
+    }
+    @Transactional
+    public void deleteUser(User user){
+        likeRepository.deleteByUser(user);
+        postRepository.deleteByUser(user);
+        userRepository.delete(user);
     }
 }
