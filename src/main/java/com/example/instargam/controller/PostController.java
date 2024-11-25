@@ -1,12 +1,9 @@
 package com.example.instargam.controller;
 
-
-import com.example.instargam.model.Post;
 import com.example.instargam.model.User;
 import com.example.instargam.repository.PostRepository;
 import com.example.instargam.service.AuthenticationService;
 import com.example.instargam.service.PostService;
-import jakarta.persistence.EntityNotFoundException;
 import org.apache.tomcat.util.http.fileupload.FileUploadException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;

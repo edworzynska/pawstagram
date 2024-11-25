@@ -6,7 +6,6 @@ import org.hibernate.annotations.CreationTimestamp;
 
 import java.security.InvalidParameterException;
 import java.time.LocalDateTime;
-import java.util.List;
 
 @Data
 @Entity

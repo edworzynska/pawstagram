@@ -1,11 +1,7 @@
 package com.example.instargam.controller;
 
 import com.example.instargam.model.User;
-import com.example.instargam.repository.PostRepository;
 import com.example.instargam.repository.UserRepository;
-import com.example.instargam.service.AuthenticationService;
-import com.example.instargam.service.S3Service;
-import com.example.instargam.service.UserService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,7 +18,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.multipart;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 

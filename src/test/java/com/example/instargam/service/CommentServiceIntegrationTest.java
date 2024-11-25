@@ -1,6 +1,5 @@
 package com.example.instargam.service;
 
-import com.example.instargam.model.Comment;
 import com.example.instargam.model.Post;
 import com.example.instargam.model.User;
 import com.example.instargam.repository.CommentRepository;
@@ -14,7 +13,6 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.security.InvalidParameterException;
-import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;

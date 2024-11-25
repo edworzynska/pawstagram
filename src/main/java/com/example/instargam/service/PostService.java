@@ -1,6 +1,5 @@
 package com.example.instargam.service;
 
-import com.example.instargam.model.Like;
 import com.example.instargam.model.Post;
 import com.example.instargam.model.User;
 import com.example.instargam.repository.LikeRepository;
@@ -10,8 +9,6 @@ import jakarta.annotation.Nullable;
 import jakarta.persistence.EntityNotFoundException;
 import org.apache.tomcat.util.http.fileupload.FileUploadException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.authorization.AuthorizationDeniedException;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
