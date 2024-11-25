@@ -61,10 +61,10 @@ public class LikeController {
         Post post = postRepository.findById(postId).orElseThrow(() ->
                 new EntityNotFoundException("Unable to find the post!"));
 
-        List<UserDTO> likes = likeService.postLikes(post);
+        List<UserDTO> likes = likeService.getPostLikes(post);
 
         if (!likes.isEmpty()){
-            return new ResponseEntity<>(likeService.postLikes(post), HttpStatus.FOUND);
+            return new ResponseEntity<>(likeService.getPostLikes(post), HttpStatus.FOUND);
         }
         else return new ResponseEntity<>("No one liked the post yet!", HttpStatus.OK);
     }

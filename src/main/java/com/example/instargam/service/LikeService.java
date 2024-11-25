@@ -39,7 +39,7 @@ public class LikeService {
         return likeRepository.countByPost(post);
     }
 
-    public List<UserDTO> postLikes(Post post){
+    public List<UserDTO> getPostLikes(Post post){
 
         List<Like> likes = likeRepository.findByPost(post);
 
