@@ -143,7 +143,7 @@ class LikeServiceIntegrationTest {
     void likeIsDeletedIfPostIsDeleted() {
         likeService.likePost(post1, user1);
         assertEquals(1, likeRepository.count());
-        postService.deletePost(post1);
+        postService.deletePost(post1.getId(), user1);
         assertEquals(0, likeRepository.count());
     }
 }
