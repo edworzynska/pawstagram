@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
-
+@RequestMapping("/api")
 @RestController
 public class PostController {
 
@@ -39,7 +39,7 @@ public class PostController {
         postService.createPost(file, description, loggedUser);
         return new ResponseEntity<>("Post uploaded successfully!", HttpStatus.CREATED);
     }
-    @GetMapping("/{postId}")
+    @GetMapping("/posts/{postId}")
     public ResponseEntity<Object> getPost(@PathVariable Long postId){
         PostDTO post = postService.getPost(postId);
         return new ResponseEntity<>(post, HttpStatus.OK);

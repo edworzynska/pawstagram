@@ -32,7 +32,7 @@ public class S3Service {
     }
 
     private File convertMultipartFileToFile(MultipartFile file) throws IOException {
-        File tempFile = new File(file.getOriginalFilename());
+        File tempFile = new File(System.getProperty("java.io.tmpdir"), file.getOriginalFilename());
         file.transferTo(tempFile);
         return tempFile;
     }

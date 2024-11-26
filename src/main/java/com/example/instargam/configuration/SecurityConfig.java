@@ -18,12 +18,12 @@ public class SecurityConfig {
         http
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/login", "/register", "/home", "/").permitAll()
+                        .requestMatchers("/login", "/api/register", "/").permitAll()
                         .anyRequest().authenticated())
                 .formLogin(formLogin -> formLogin
                         .loginPage("/login")
                         .usernameParameter("email")
-                        .defaultSuccessUrl("/home", true)
+                        .defaultSuccessUrl("/api/feed", true)
                         .permitAll())
                 .logout(logout -> logout
                         .logoutUrl("/logout")

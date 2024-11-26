@@ -8,10 +8,12 @@ import com.example.instargam.repository.*;
 import jakarta.annotation.Nullable;
 import jakarta.persistence.EntityNotFoundException;
 import org.apache.tomcat.util.http.fileupload.FileUploadException;
+import org.hibernate.query.SortDirection;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -94,7 +96,7 @@ public class PostService {
     }
 
     public Page<PostDTO> getAllPosts(int pageNo, int pageSize) {
-        Pageable pageable = PageRequest.of(pageNo, pageSize);
+        Pageable pageable = PageRequest.of(pageNo, pageSize, Sort.by(Sort.Direction.DESC, "date"));
         Page<Post> posts = postRepository.findAll(pageable);
         return posts.map(post -> new PostDTO(
                 post.getId(),
