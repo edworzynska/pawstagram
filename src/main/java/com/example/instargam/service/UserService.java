@@ -1,5 +1,6 @@
 package com.example.instargam.service;
 
+import com.example.instargam.dto.UserDTO;
 import com.example.instargam.model.User;
 import com.example.instargam.repository.LikeRepository;
 import com.example.instargam.repository.PostRepository;
@@ -7,6 +8,7 @@ import com.example.instargam.repository.UserRepository;
 import jakarta.mail.internet.AddressException;
 import jakarta.mail.internet.InternetAddress;
 import jakarta.persistence.EntityExistsException;
+import jakarta.persistence.EntityNotFoundException;
 import org.apache.tomcat.util.http.fileupload.FileUploadException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -129,5 +131,14 @@ public class UserService {
         likeRepository.deleteByUser(user);
         postRepository.deleteByUser(user);
         userRepository.delete(user);
+    }
+
+    public UserDTO getUserInfo(String username){
+        User user = userRepository.findByUsername(username).orElseThrow(() ->
+                new EntityNotFoundException("User not found!"));
+
+        return new UserDTO
+                (user.getId(), user.getUsername(), user.getProfileImgUrl(),
+                        "/users/" + user.getUsername(), user.getBio());
     }
 }

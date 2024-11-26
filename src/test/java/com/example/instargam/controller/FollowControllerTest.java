@@ -4,6 +4,7 @@ import com.example.instargam.model.Post;
 import com.example.instargam.model.User;
 import com.example.instargam.repository.PostRepository;
 import com.example.instargam.repository.UserRepository;
+import com.example.instargam.service.FollowService;
 import com.example.instargam.service.LikeService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -16,22 +17,21 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
 
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 
 @ActiveProfiles("test")
 @Transactional
 @SpringBootTest
 @AutoConfigureMockMvc
-public class LikeControllerTest {
+class FollowControllerTest {
 
     @Autowired
-    private LikeService likeService;
+    private FollowService followService;
 
     @Autowired
     private MockMvc mockMvc;
@@ -39,13 +39,11 @@ public class LikeControllerTest {
     @Autowired
     private UserRepository userRepository;
 
-    @Autowired
-    private PostRepository postRepository;
 
     private User user1;
     private User user2;
     private User user3;
-    private Post post1;
+
 
     @BeforeEach
     void setUp() {
@@ -66,49 +64,43 @@ public class LikeControllerTest {
         user3.setUsername("username_3");
         user3.setPassword("Password111!");
         userRepository.save(user3);
-
-        post1 = new Post();
-        post1.setImgUrl("users/test/profile-pics/IMG_1617.jpeg");
-        post1.setUser(user1);
-        post1.setDescription("test test");
-        postRepository.save(post1);
     }
     @Test
     @WithUserDetails(value = "user1@email", setupBefore = TestExecutionEvent.TEST_EXECUTION)
-    void likesPost() throws Exception{
-        Long postId = post1.getId();
-        mockMvc.perform(post("/posts/{postId}/like", postId))
-                .andExpect(status().isOk())
-                .andExpect(content().string("Post liked successfully!"));
-
-        assertEquals(1, likeService.getNumberOfLikes(post1));
+    void successfullyFollowsUser() throws Exception {
+        mockMvc.perform(post("/{username}/follow", user2.getUsername()))
+                .andExpect(status().isAccepted())
+                .andExpect(content().string("Successfully followed the user!"));
     }
     @Test
     @WithUserDetails(value = "user1@email", setupBefore = TestExecutionEvent.TEST_EXECUTION)
-    void unlikesPost() throws Exception{
-        Long postId = post1.getId();
-        mockMvc.perform(post("/posts/{postId}/like", postId))
+    void returnsErrorStatusIfTryingToFollowThemself() throws Exception {
+        mockMvc.perform(post("/{username}/follow", user1.getUsername()))
+                .andExpect(status().is4xxClientError())
+                .andExpect(content().string("Unable to follow owned account."));
+    }
+
+    @Test
+    @WithUserDetails(value = "user1@email", setupBefore = TestExecutionEvent.TEST_EXECUTION)
+    void successfullyUnfollowsUser() throws Exception {
+        mockMvc.perform(delete("/{username}/unfollow", user2.getUsername()))
+                .andExpect(status().isAccepted())
+                .andExpect(content().string("Successfully unfollowed the user!"));
+    }
+
+    @Test
+    @WithUserDetails(value = "user1@email", setupBefore = TestExecutionEvent.TEST_EXECUTION)
+    void returnsListOfFollowers() throws Exception {
+        followService.followUser(user2, "username_1");
+        mockMvc.perform(get("/{username}/followers", user1.getUsername()))
                 .andExpect(status().isOk())
-                .andExpect(content().string("Post liked successfully!"));
-
-        assertEquals(1, likeService.getNumberOfLikes(post1));
-
-        mockMvc.perform(delete("/posts/{postId}/unlike", postId))
-                .andExpect(status().isOk())
-                .andExpect(content().string("Post unliked successfully!"));
-
-        assertEquals(0, likeService.getNumberOfLikes(post1));
+                .andExpect(content().contentType("application/json"));
     }
     @Test
     @WithUserDetails(value = "user1@email", setupBefore = TestExecutionEvent.TEST_EXECUTION)
-    void getsListOfUserDtosWhoLikedThePost() throws Exception {
-        Long postId = post1.getId();
-
-        mockMvc.perform(post("/posts/{postId}/like", postId))
-                .andExpect(status().isOk())
-                .andExpect(content().string("Post liked successfully!"));
-
-        mockMvc.perform(get("/posts/{postId}/likes", postId))
+    void returnsListOfFollowingUsers() throws Exception {
+        followService.followUser(user1, "username_2");
+        mockMvc.perform(get("/{username}/followers", user1.getUsername()))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType("application/json"));
     }

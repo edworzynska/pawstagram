@@ -134,9 +134,9 @@ class LikeServiceIntegrationTest {
         likeService.likePost(post1, user3);
         assertEquals(3, likeRepository.countByPost(post1));
 
-        assertEquals(3, likeService.getPostLikes(post1).size());
-        assertEquals("username_1", likeService.getPostLikes(post1).getFirst().getUsername());
-        assertEquals("/users/username_1", likeService.getPostLikes(post1).getFirst().getProfileUrl());
+        assertEquals(3, likeService.getLikesByPost(post1).size());
+        assertEquals("username_1", likeService.getLikesByPost(post1).getFirst().getUsername());
+        assertEquals("/users/username_1", likeService.getLikesByPost(post1).getFirst().getProfileUrl());
     }
 
     @Test

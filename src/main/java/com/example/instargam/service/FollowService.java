@@ -1,7 +1,9 @@
 package com.example.instargam.service;
 
+import com.example.instargam.dto.PostDTO;
 import com.example.instargam.dto.UserDTO;
 import com.example.instargam.model.Follow;
+import com.example.instargam.model.Post;
 import com.example.instargam.model.User;
 import com.example.instargam.repository.FollowRepository;
 import com.example.instargam.repository.UserRepository;
@@ -79,6 +81,8 @@ public class FollowService {
                         "/users/" + follow.getFollowing().getUsername()))
                 .toList();
     }
+
+
     public Long getNumberOfFollowers(User following){
         return followRepository.countByFollowing(following);
     }

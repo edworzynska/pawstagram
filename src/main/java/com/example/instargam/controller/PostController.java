@@ -1,5 +1,6 @@
 package com.example.instargam.controller;
 
+import com.example.instargam.dto.PostDTO;
 import com.example.instargam.model.User;
 import com.example.instargam.repository.PostRepository;
 import com.example.instargam.service.AuthenticationService;
@@ -10,6 +11,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+
+import java.util.List;
 
 @RestController
 public class PostController {
@@ -43,5 +46,11 @@ public class PostController {
 
         postService.deletePost(postId, loggedUser);
         return new ResponseEntity<>("Post deleted successfully!", HttpStatus.OK);
+    }
+    @GetMapping("/{username}/posts")
+    public ResponseEntity<Object> getPosts(@PathVariable String username){
+        List<PostDTO> postsByUser = postService.getPostsByUser(username);
+
+        return new ResponseEntity<>(postsByUser, HttpStatus.ACCEPTED);
     }
 }

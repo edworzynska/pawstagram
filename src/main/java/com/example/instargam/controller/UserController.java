@@ -1,5 +1,6 @@
 package com.example.instargam.controller;
 
+import com.example.instargam.dto.UserDTO;
 import com.example.instargam.model.User;
 import com.example.instargam.service.AuthenticationService;
 import com.example.instargam.service.S3Service;
@@ -7,9 +8,7 @@ import com.example.instargam.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 @RestController
@@ -57,5 +56,10 @@ public class UserController {
         User loggedUser = authenticationService.getLoggedUser();
         userService.addBio(bio, loggedUser.getUsername());
         return ResponseEntity.accepted().body("Bio updated successfully!");
+    }
+    @GetMapping("/{username}")
+    public ResponseEntity<Object> getUserInfo(@PathVariable String username){
+        UserDTO user = userService.getUserInfo(username);
+        return new ResponseEntity<>(user, HttpStatus.ACCEPTED);
     }
 }

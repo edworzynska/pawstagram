@@ -46,7 +46,7 @@ public class FollowController {
             @PathVariable String username){
 
         List<UserDTO> followers = followService.getFollowers(username);
-        return new ResponseEntity<>(followers, HttpStatus.ACCEPTED);
+        return new ResponseEntity<>(followers, HttpStatus.OK);
     }
     @GetMapping("/{username}/following")
     public ResponseEntity<Object> getFollowing(

@@ -138,4 +138,23 @@ class UserServiceIntegrationTest {
                 "doo bee doo bee doo bee doo bee doo bee doo bee doo bee doo bee doo bee doo bee doo bee doo bee doo bee doo bee doo bee doo bee doo bee doo bee doo bee doo bee ", "test_name"));
         assertEquals("Invalid length! Maximum number of characters: 150", e.getMessage());
     }
+
+    @Test
+    void returnsUserInfoAsDto() {
+        User test = userService.createUser("email@email.com", "test_name", "passsword1!");
+        userService.addBio("some bio", "test_name");
+        var result = userService.getUserInfo("test_name");
+        assertEquals(test.getId(), result.getId());
+        assertEquals(test.getUsername(), result.getUsername());
+        assertEquals(test.getProfileImgUrl(), result.getProfileImgUrl());
+    }
+    @Test
+    void returnsUserInfoAsDtoIfNoBio() {
+        User test = userService.createUser("email@email.com", "test_name", "passsword1!");
+        var result = userService.getUserInfo("test_name");
+        assertEquals(test.getId(), result.getId());
+        assertEquals(test.getUsername(), result.getUsername());
+        assertEquals(test.getProfileImgUrl(), result.getProfileImgUrl());
+        assertNull(result.getBio());
+    }
 }
