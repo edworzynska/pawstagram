@@ -1,13 +1,10 @@
 package com.example.instargam.service;
 
-import com.example.instargam.dto.PostDTO;
 import com.example.instargam.dto.UserDTO;
 import com.example.instargam.model.Follow;
-import com.example.instargam.model.Post;
 import com.example.instargam.model.User;
 import com.example.instargam.repository.FollowRepository;
 import com.example.instargam.repository.UserRepository;
-import jakarta.persistence.EntityExistsException;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

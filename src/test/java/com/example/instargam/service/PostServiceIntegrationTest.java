@@ -104,7 +104,7 @@ class PostServiceIntegrationTest {
         Follow follow = new Follow(testUser, followedUser);
         followRepository.save(follow);
 
-        List<PostDTO> posts = postService.followedUsersPosts("test_user");
+        List<PostDTO> posts = postService.followedUsersPosts(testUser);
 
         assertEquals(1, posts.size());
         assertEquals("followed user's post", posts.getFirst().getDescription());
@@ -112,19 +112,12 @@ class PostServiceIntegrationTest {
     }
     @Test
     void followedUsersPostsReturnsEmptyListWhenUserFollowsNoOne() {
-        List<PostDTO> posts = postService.followedUsersPosts("test_user");
+        List<PostDTO> posts = postService.followedUsersPosts(testUser);
 
         assertNotNull(posts);
         assertTrue(posts.isEmpty());
     }
 
-    @Test
-    void followedUsersPostsThrowsExceptionForInvalidUsername() {
-        Exception e = assertThrows(EntityNotFoundException.class, () ->
-                postService.followedUsersPosts("fake_user"));
-
-        assertEquals("User not found!", e.getMessage());
-    }
     @Test
     void deletesPost() {
 

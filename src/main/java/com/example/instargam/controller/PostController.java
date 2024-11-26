@@ -7,6 +7,7 @@ import com.example.instargam.service.AuthenticationService;
 import com.example.instargam.service.PostService;
 import org.apache.tomcat.util.http.fileupload.FileUploadException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -38,6 +39,11 @@ public class PostController {
         postService.createPost(file, description, loggedUser);
         return new ResponseEntity<>("Post uploaded successfully!", HttpStatus.CREATED);
     }
+    @GetMapping("/{postId}")
+    public ResponseEntity<Object> getPost(@PathVariable Long postId){
+        PostDTO post = postService.getPost(postId);
+        return new ResponseEntity<>(post, HttpStatus.OK);
+    }
     @DeleteMapping("/{postId}/delete")
     public ResponseEntity<Object> deletePost(
             @PathVariable Long postId) {
@@ -48,9 +54,24 @@ public class PostController {
         return new ResponseEntity<>("Post deleted successfully!", HttpStatus.OK);
     }
     @GetMapping("/{username}/posts")
-    public ResponseEntity<Object> getPosts(@PathVariable String username){
+    public ResponseEntity<Object> getPostsByUser(@PathVariable String username){
         List<PostDTO> postsByUser = postService.getPostsByUser(username);
 
         return new ResponseEntity<>(postsByUser, HttpStatus.ACCEPTED);
+    }
+    @GetMapping("/feed")
+    public ResponseEntity<Object> getPostsByFollowing(){
+        User loggedUser = authenticationService.getLoggedUser();
+        List<PostDTO> posts = postService.followedUsersPosts(loggedUser);
+        return new ResponseEntity<>(posts, HttpStatus.OK);
+    }
+    @GetMapping("/posts")
+    public ResponseEntity<Object> getAllPosts(
+            @RequestParam(defaultValue = "0") int pageNo,
+            @RequestParam(defaultValue = "10") int pageSize) {
+
+        Page<PostDTO> posts = postService.getAllPosts(pageNo, pageSize);
+
+        return new ResponseEntity<>(posts, HttpStatus.OK);
     }
 }

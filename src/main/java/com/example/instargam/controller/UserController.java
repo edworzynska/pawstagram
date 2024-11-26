@@ -3,7 +3,6 @@ package com.example.instargam.controller;
 import com.example.instargam.dto.UserDTO;
 import com.example.instargam.model.User;
 import com.example.instargam.service.AuthenticationService;
-import com.example.instargam.service.S3Service;
 import com.example.instargam.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -19,9 +18,6 @@ public class UserController {
 
     @Autowired
     private AuthenticationService authenticationService;
-
-    @Autowired
-    private S3Service s3Service;
 
     @Autowired
     public UserController(UserService userService, AuthenticationService authenticationService) {

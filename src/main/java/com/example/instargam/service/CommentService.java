@@ -1,5 +1,6 @@
 package com.example.instargam.service;
 
+import com.example.instargam.dto.CommentDTO;
 import com.example.instargam.model.Comment;
 import com.example.instargam.model.Post;
 import com.example.instargam.model.User;
@@ -9,6 +10,8 @@ import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 @Service
 public class CommentService {
@@ -33,5 +36,21 @@ public class CommentService {
         comment.setContents(contents);
 
         commentRepository.save(comment);
+    }
+    public List<CommentDTO> commentsToPost(Long postId){
+
+        Post post = postRepository.findById(postId).orElseThrow(() ->
+                new EntityNotFoundException("Post not found!"));
+
+        List<Comment> comments = commentRepository.findByPost(post);
+
+        return comments.stream().map(comment ->
+                new CommentDTO
+                        (comment.getId(),
+                        comment.getUser().getUsername(),
+                        comment.getUser().getProfileImgUrl(),
+                        comment.getContents(),
+                        comment.getDate()))
+                .toList();
     }
 }

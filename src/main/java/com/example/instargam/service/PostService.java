@@ -9,6 +9,9 @@ import jakarta.annotation.Nullable;
 import jakarta.persistence.EntityNotFoundException;
 import org.apache.tomcat.util.http.fileupload.FileUploadException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -65,6 +68,18 @@ public class PostService {
 
         return post;
     }
+    public PostDTO getPost(Long postId){
+        Post post = postRepository.findById(postId).orElseThrow(() ->
+                new EntityNotFoundException("Post not found!"));
+
+        return new PostDTO(post.getId(),
+                post.getUser().getUsername(),
+                post.getImgUrl(),
+                post.getDescription(),
+                commentRepository.countByPost(post),
+                likeRepository.countByPost(post),
+                post.getDate());
+    }
     @Transactional
     public void deletePost(Long postId, User loggedUser){
 
@@ -77,7 +92,19 @@ public class PostService {
         }
         else throw new SecurityException("Access denied!");
     }
-    @Transactional
+
+    public Page<PostDTO> getAllPosts(int pageNo, int pageSize) {
+        Pageable pageable = PageRequest.of(pageNo, pageSize);
+        Page<Post> posts = postRepository.findAll(pageable);
+        return posts.map(post -> new PostDTO(
+                post.getId(),
+                post.getUser().getUsername(),
+                post.getImgUrl(),
+                post.getDescription(),
+                commentRepository.countByPost(post),
+                likeRepository.countByPost(post),
+                post.getDate()));
+    }
     public List<PostDTO> getPostsByUser(String username){
         User user = userRepository.findByUsername(username).orElseThrow(() ->
                 new EntityNotFoundException("User not found!"));
@@ -92,10 +119,8 @@ public class PostService {
                 likeRepository.countByPost(post),
                 post.getDate())).toList();
     }
-    public List<PostDTO> followedUsersPosts(String followerUsername){
+    public List<PostDTO> followedUsersPosts(User follower){
 
-        User follower = userRepository.findByUsername(followerUsername)
-                .orElseThrow(() -> new EntityNotFoundException("User not found!"));
         List<User> followedUsers = getFollowedUsers(follower);
         List<Post> followedUsersPosts = postRepository.findByUserInOrderByDateDesc(followedUsers);
 
@@ -113,4 +138,5 @@ public class PostService {
         List<Follow> follows = followRepository.findByFollower(follower);
         return follows.stream().map(Follow::getFollowing).toList();
     }
+
 }
