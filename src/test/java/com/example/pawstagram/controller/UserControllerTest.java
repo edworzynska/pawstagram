@@ -66,7 +66,7 @@ class UserControllerTest {
 
     @Test
     void createsUser() throws Exception {
-        mockMvc.perform(post("/register").param("email", "test@email.com")
+        mockMvc.perform(post("/api/register").param("email", "test@email.com")
                 .param("username", "test_name")
                 .param("password", "Password1!"))
                 .andExpect(status().isCreated())
@@ -75,7 +75,7 @@ class UserControllerTest {
 
     @Test
     void throwsMissingParametersExceptionIfParamsAreMissing() throws Exception{
-        mockMvc.perform(post("/register").param("email", "test@email.com")
+        mockMvc.perform(post("/api/register").param("email", "test@email.com")
                         .param("username", "test_name"))
                 .andExpect(status().is4xxClientError())
                 .andExpect(content().string("Missing parameter: password"));
@@ -83,7 +83,7 @@ class UserControllerTest {
 
     @Test
     void throwsInvalidParameterExceptionIfNameIsEmpty() throws Exception {
-        mockMvc.perform(post("/register").param("email", "test@email.com")
+        mockMvc.perform(post("/api/register").param("email", "test@email.com")
                         .param("username", "")
                         .param("password", "Password!1"))
                 .andExpect(status().is4xxClientError())
@@ -91,7 +91,7 @@ class UserControllerTest {
     }
     @Test
     void throwsInvalidParameterExceptionIfEmailIsInvalid() throws Exception {
-        mockMvc.perform(post("/register").param("email", "test@")
+        mockMvc.perform(post("/api/register").param("email", "test@")
                         .param("username", "test_name")
                         .param("password", "Password!1"))
                 .andExpect(status().is4xxClientError())
@@ -99,7 +99,7 @@ class UserControllerTest {
     }
     @Test
     void throwsSecurityExceptionIfPasswordIsInvalid() throws Exception {
-        mockMvc.perform(post("/register").param("email", "test@test.com")
+        mockMvc.perform(post("/api/register").param("email", "test@test.com")
                         .param("username", "test_name")
                         .param("password", "Pass"))
                 .andExpect(status().is4xxClientError())
@@ -108,11 +108,11 @@ class UserControllerTest {
 
     @Test
     void throwsEntityExistExceptionIfEmailIsInUse() throws Exception{
-        mockMvc.perform(post("/register").param("email", "test@test.com")
+        mockMvc.perform(post("/api/register").param("email", "test@test.com")
                         .param("username", "test_name")
                         .param("password", "Password1!"));
 
-        mockMvc.perform(post("/register").param("email", "test@test.com")
+        mockMvc.perform(post("/api/register").param("email", "test@test.com")
                         .param("username", "test_name2")
                         .param("password", "Passworrr12!"))
                 .andExpect(status().is4xxClientError())
@@ -130,7 +130,7 @@ class UserControllerTest {
                 "sample image content".getBytes()
         );
 
-        mockMvc.perform(multipart("/upload-profile-pic")
+        mockMvc.perform(multipart("/api/upload-profile-pic")
                         .file(mockFile)
                         .with(user(testUser.getEmail()))
                         .contentType(MediaType.MULTIPART_FORM_DATA))
@@ -140,7 +140,7 @@ class UserControllerTest {
     @Test
     @WithUserDetails(value = "test.email@email.com", setupBefore = TestExecutionEvent.TEST_EXECUTION)
     void addsBio() throws Exception {
-        mockMvc.perform(post("/add-bio")
+        mockMvc.perform(post("/api/add-bio")
                 .param("bio", "some bio"))
                 .andExpect(status().isAccepted())
                 .andExpect(content().string("Bio updated successfully!"));
@@ -148,7 +148,7 @@ class UserControllerTest {
     @Test
     @WithUserDetails(value = "test.email@email.com", setupBefore = TestExecutionEvent.TEST_EXECUTION)
     void throwsErrorIfBioDoesntMeetRequirements() throws Exception {
-        mockMvc.perform(post("/add-bio")
+        mockMvc.perform(post("/api/add-bio")
                         .param("bio", "   "))
                 .andExpect(status().isBadRequest())
                 .andExpect(content().string("Bio cannot be empty!"));
@@ -156,7 +156,7 @@ class UserControllerTest {
     @Test
     @WithUserDetails(value = "test.email@email.com", setupBefore = TestExecutionEvent.TEST_EXECUTION)
     void throwsErrorIfMissingParameter() throws Exception {
-        mockMvc.perform(post("/add-bio"))
+        mockMvc.perform(post("/api/add-bio"))
                 .andExpect(status().isBadRequest())
                 .andExpect(content().string("Missing parameter: bio"));
     }

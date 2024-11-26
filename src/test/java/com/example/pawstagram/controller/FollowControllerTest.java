@@ -64,14 +64,14 @@ class FollowControllerTest {
     @Test
     @WithUserDetails(value = "user1@email", setupBefore = TestExecutionEvent.TEST_EXECUTION)
     void successfullyFollowsUser() throws Exception {
-        mockMvc.perform(post("/{username}/follow", user2.getUsername()))
+        mockMvc.perform(post("/api/{username}/follow", user2.getUsername()))
                 .andExpect(status().isAccepted())
                 .andExpect(content().string("Successfully followed the user!"));
     }
     @Test
     @WithUserDetails(value = "user1@email", setupBefore = TestExecutionEvent.TEST_EXECUTION)
     void returnsErrorStatusIfTryingToFollowThemself() throws Exception {
-        mockMvc.perform(post("/{username}/follow", user1.getUsername()))
+        mockMvc.perform(post("/api/{username}/follow", user1.getUsername()))
                 .andExpect(status().is4xxClientError())
                 .andExpect(content().string("Unable to follow owned account."));
     }
@@ -79,7 +79,7 @@ class FollowControllerTest {
     @Test
     @WithUserDetails(value = "user1@email", setupBefore = TestExecutionEvent.TEST_EXECUTION)
     void successfullyUnfollowsUser() throws Exception {
-        mockMvc.perform(delete("/{username}/unfollow", user2.getUsername()))
+        mockMvc.perform(delete("/api/{username}/unfollow", user2.getUsername()))
                 .andExpect(status().isAccepted())
                 .andExpect(content().string("Successfully unfollowed the user!"));
     }
@@ -88,7 +88,7 @@ class FollowControllerTest {
     @WithUserDetails(value = "user1@email", setupBefore = TestExecutionEvent.TEST_EXECUTION)
     void returnsListOfFollowers() throws Exception {
         followService.followUser(user2, "username_1");
-        mockMvc.perform(get("/{username}/followers", user1.getUsername()))
+        mockMvc.perform(get("/api/{username}/followers", user1.getUsername()))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType("application/json"));
     }
@@ -96,7 +96,7 @@ class FollowControllerTest {
     @WithUserDetails(value = "user1@email", setupBefore = TestExecutionEvent.TEST_EXECUTION)
     void returnsListOfFollowingUsers() throws Exception {
         followService.followUser(user1, "username_2");
-        mockMvc.perform(get("/{username}/followers", user1.getUsername()))
+        mockMvc.perform(get("/api/{username}/followers", user1.getUsername()))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType("application/json"));
     }

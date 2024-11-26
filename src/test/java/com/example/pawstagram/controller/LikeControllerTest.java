@@ -77,7 +77,7 @@ public class LikeControllerTest {
     @WithUserDetails(value = "user1@email", setupBefore = TestExecutionEvent.TEST_EXECUTION)
     void likesPost() throws Exception{
         Long postId = post1.getId();
-        mockMvc.perform(post("/posts/{postId}/like", postId))
+        mockMvc.perform(post("/api/posts/{postId}/like", postId))
                 .andExpect(status().isOk())
                 .andExpect(content().string("Post liked successfully!"));
 
@@ -87,13 +87,13 @@ public class LikeControllerTest {
     @WithUserDetails(value = "user1@email", setupBefore = TestExecutionEvent.TEST_EXECUTION)
     void unlikesPost() throws Exception{
         Long postId = post1.getId();
-        mockMvc.perform(post("/posts/{postId}/like", postId))
+        mockMvc.perform(post("/api/posts/{postId}/like", postId))
                 .andExpect(status().isOk())
                 .andExpect(content().string("Post liked successfully!"));
 
         assertEquals(1, likeService.getNumberOfLikes(post1));
 
-        mockMvc.perform(delete("/posts/{postId}/unlike", postId))
+        mockMvc.perform(delete("/api/posts/{postId}/unlike", postId))
                 .andExpect(status().isOk())
                 .andExpect(content().string("Post unliked successfully!"));
 
@@ -104,11 +104,11 @@ public class LikeControllerTest {
     void getsListOfUserDtosWhoLikedThePost() throws Exception {
         Long postId = post1.getId();
 
-        mockMvc.perform(post("/posts/{postId}/like", postId))
+        mockMvc.perform(post("/api/posts/{postId}/like", postId))
                 .andExpect(status().isOk())
                 .andExpect(content().string("Post liked successfully!"));
 
-        mockMvc.perform(get("/posts/{postId}/likes", postId))
+        mockMvc.perform(get("/api/posts/{postId}/likes", postId))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType("application/json"));
     }

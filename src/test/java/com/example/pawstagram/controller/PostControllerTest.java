@@ -57,7 +57,7 @@ public class PostControllerTest {
                 "image/jpeg",
                 "sample image content".getBytes()
         );
-        mockMvc.perform(multipart("/add-post")
+        mockMvc.perform(multipart("/api/add-post")
                 .file(mockFile)
                 .with(user(testUser.getEmail()))
                 .contentType(MediaType.MULTIPART_FORM_DATA)
@@ -75,7 +75,7 @@ public class PostControllerTest {
                 "image/jpeg",
                 "sample image content".getBytes()
         );
-        mockMvc.perform(multipart("/add-post")
+        mockMvc.perform(multipart("/api/add-post")
                         .file(mockFile)
                         .with(user(testUser.getEmail()))
                         .contentType(MediaType.MULTIPART_FORM_DATA))

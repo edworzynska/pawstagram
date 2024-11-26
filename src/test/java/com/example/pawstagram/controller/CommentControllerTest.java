@@ -73,7 +73,7 @@ class CommentControllerTest {
     @WithUserDetails(value = "user1@email", setupBefore = TestExecutionEvent.TEST_EXECUTION)
     void addsCommentAsLoggedUser() throws Exception{
         Long postId = post1.getId();
-        mockMvc.perform(post("/posts/{postId}/add-comment", postId)
+        mockMvc.perform(post("/api/posts/{postId}/add-comment", postId)
                 .param("contents", "test comment"))
                 .andExpect(status().isCreated())
                 .andExpect(content().string("The comment was added successfully!"));
@@ -83,7 +83,7 @@ class CommentControllerTest {
     @WithUserDetails(value = "user1@email", setupBefore = TestExecutionEvent.TEST_EXECUTION)
     void throwsErrorIfContentsAreEmpty() throws Exception{
         Long postId = post1.getId();
-        mockMvc.perform(post("/posts/{postId}/add-comment", postId)
+        mockMvc.perform(post("/api/posts/{postId}/add-comment", postId)
                         .param("contents", ""))
                 .andExpect(status().is4xxClientError())
                 .andExpect(content().string("The comment cannot be empty!"));
@@ -92,7 +92,7 @@ class CommentControllerTest {
     @WithUserDetails(value = "user1@email", setupBefore = TestExecutionEvent.TEST_EXECUTION)
     void throwsErrorIfContentsAreBlank() throws Exception{
         Long postId = post1.getId();
-        mockMvc.perform(post("/posts/{postId}/add-comment", postId)
+        mockMvc.perform(post("/api/posts/{postId}/add-comment", postId)
                         .param("contents", "    "))
                 .andExpect(status().is4xxClientError())
                 .andExpect(content().string("The comment cannot be empty!"));
@@ -101,7 +101,7 @@ class CommentControllerTest {
     @WithUserDetails(value = "user1@email", setupBefore = TestExecutionEvent.TEST_EXECUTION)
     void throwsMissingParameterErrorIfNoParam() throws Exception{
         Long postId = post1.getId();
-        mockMvc.perform(post("/posts/{postId}/add-comment", postId))
+        mockMvc.perform(post("/api/posts/{postId}/add-comment", postId))
                 .andExpect(status().is4xxClientError())
                 .andExpect(content().string("Missing parameter: contents"));
     }
