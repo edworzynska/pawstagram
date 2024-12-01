@@ -119,6 +119,9 @@ public class UserService {
             throw new FileUploadException("Error uploading profile picture", e);
         }
     }
+
+
+
     @Transactional
     public void addBio(String bio, String username){
         User user = userRepository.findByUsername(username).orElseThrow(()

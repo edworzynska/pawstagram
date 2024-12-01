@@ -59,4 +59,10 @@ public class UserController {
         UserDTO user = userService.getUserInfo(username);
         return new ResponseEntity<>(user, HttpStatus.ACCEPTED);
     }
+    @GetMapping("/{username}/profile-pic")
+    public ResponseEntity<Object> getProfilePic(@PathVariable String username){
+        UserDTO user = userService.getUserInfo(username);
+        String picUrl = user.getProfileImgUrl();
+        return new ResponseEntity<>(picUrl, HttpStatus.ACCEPTED);
+    }
 }

@@ -28,7 +28,7 @@ public class CommentController {
     @PostMapping("/{postId}/add-comment")
     public ResponseEntity<Object> addComment(
             @PathVariable Long postId,
-            @RequestParam String contents){
+            @RequestBody String contents){
 
         User loggedUser = authenticationService.getLoggedUser();
         commentService.addComment(postId, loggedUser, contents);
