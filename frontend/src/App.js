@@ -4,7 +4,7 @@ import Login from './components/Login';
 import Register from "./components/Register";
 import Feed from './components/Feed';
 import Posts from './components/Posts';
-import LoginAndRegister from './components/LoginAndRegister';
+import Profile from './components/Profile';
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import './App.css';
 import NewPost from './components/NewPost';
@@ -22,6 +22,7 @@ function App() {
               <Route path="/feed" element={<Feed />} />
               <Route path="/posts" element={<Posts />} />
               <Route path="/new-post" element={<NewPost />} />
+              <Route path="/profile/:username" element={<Profile />} />
           </Routes>
           </main>
    </Router>

@@ -1,6 +1,8 @@
 package com.example.pawstagram.model;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotEmpty;
 import lombok.Data;
 import org.hibernate.annotations.CreationTimestamp;
 
@@ -34,14 +36,6 @@ public class User {
     @CreationTimestamp
     @Column(name = "date", nullable = false, updatable = false)
     private LocalDateTime date;
-
-    public void setUsername(String username) {
-        if (username.isEmpty() || username.isBlank()){
-            throw new InvalidParameterException("Username cannot be empty!");
-        }
-
-        this.username = username;
-    }
 
     public void setBio(String bio){
         if (bio.isBlank() || bio.isEmpty()){

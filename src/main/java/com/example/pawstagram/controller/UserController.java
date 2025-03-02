@@ -65,4 +65,10 @@ public class UserController {
         String picUrl = user.getProfileImgUrl();
         return new ResponseEntity<>(picUrl, HttpStatus.ACCEPTED);
     }
+    @GetMapping("/logged-user")
+    public ResponseEntity<Object> getLoggedUserProfile(){
+        String username = authenticationService.getLoggedUser().getUsername();
+        UserDTO user = userService.getUserInfo(username);
+        return new ResponseEntity<>(user, HttpStatus.OK);
+    }
 }

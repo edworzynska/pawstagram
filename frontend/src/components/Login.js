@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import axios from "axios";
+import apiClient from "../ApiClient";
 
 const Login = () => {
   const [email, setEmail] = useState("");
@@ -14,21 +15,22 @@ const Login = () => {
       formData.append("email", email);
       formData.append("password", password);
 
-     
-      const response = await axios.post(
+      await axios.post(
         "http://localhost:8080/login",
         formData,
         {
           headers: { "Content-Type": "application/x-www-form-urlencoded" },
           withCredentials: true, 
-        }
-      );
+        });
 
-      
+      const response = await apiClient.get("/api/logged-user");
+      localStorage.setItem("username", response.data.username);
+      localStorage.setItem("user", JSON.stringify(response.data));
+
+      window.location.href = "/feed";
       console.log("Login successful:", response.data);
-      window.location.href = "/feed"; 
+
     } catch (err) {
-      
       console.error("Login failed:", err.response?.data || err.message);
       setError("Invalid email or password. Please try again.");
     }

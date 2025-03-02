@@ -7,6 +7,7 @@ import './Navbar.css';
 
 const Navbar = () => {
   const [menuOpen, setMenuOpen] = useState(false);
+  const activeUsername = localStorage.getItem("username") || "currentUser";
 
   const toggleMenu = () => {
     setMenuOpen(!menuOpen);
@@ -24,6 +25,11 @@ const Navbar = () => {
             <li className="nav__item">
               <NavLink to="/feed" className="nav__link">
                 <FaPaw /> Feed
+              </NavLink>
+            </li>
+            <li className="nav__item">
+              <NavLink to={`/profile/${activeUsername}`} className="nav__link">
+              <FaPaw /> My Profile
               </NavLink>
             </li>
             <li className="nav__item">
